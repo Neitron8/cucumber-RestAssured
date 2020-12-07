@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://repo.mycompany.com/maven2"
+    }
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    testCompile "io.cucumber:cucumber-java:6.2.2"
+    testCompile "io.cucumber:cucumber-junit:6.2.2"
+    testCompile "io.rest-assured:rest-assured:3.3.0"
+    testCompile "com.jayway.jsonpath:json-path:2.4.0"
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task cucumber() {
+    dependsOn assemble, compileTestJava
+    doLast {
+        mkdir 'build/test-results/'
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--plugin', 'html:build/test-results/functional.html', '--plugin', 'junit:build/test-results/functional.xml','--tags', '@functional', '--glue', 'scenarios', 'src/test/resources']
+        }
+    }
+}
