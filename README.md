@@ -1,5 +1,6 @@
 # cucumber-RestAssured
-test java cucumber-RestAssured
+test java cucumber-RestAssured, Gradle
+
 It is necessary to make sure of the import before starting:
 
 import io.cucumber.java.en.And;
@@ -14,3 +15,5 @@ import org.junit.jupiter.api.Assertions;
 import static io.restassured.RestAssured.given;
 
 for all test files .java
+
+in the roots of the project folder, execute the "gradle cucumber" command to run.
